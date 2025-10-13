@@ -1,0 +1,49 @@
+# Database configuration added by extension-database
+spring:
+  datasource:
+    {{#isPostgreSQL}}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/{{{projectName}}}}
+    username: ${DATABASE_USERNAME:{{{projectName}}}}
+    driver-class-name: org.postgresql.Driver
+    {{/isPostgreSQL}}
+    {{#isMySQL}}
+    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/{{{projectName}}}}
+    username: ${DATABASE_USERNAME:{{{projectName}}}}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    {{/isMySQL}}
+    {{#isMariaDB}}
+    url: ${DATABASE_URL:jdbc:mariadb://localhost:3306/{{{projectName}}}}
+    username: ${DATABASE_USERNAME:{{{projectName}}}}
+    driver-class-name: org.mariadb.jdbc.Driver
+    {{/isMariaDB}}
+    {{#isH2}}
+    url: ${DATABASE_URL:jdbc:h2:mem:{{{projectName}}}}
+    username: ${DATABASE_USERNAME:sa}
+    driver-class-name: org.h2.Driver
+    {{/isH2}}
+    password: ${DATABASE_PASSWORD:password}
+    hikari:
+      maximum-pool-size: {{{connectionPoolSize}}}
+  jpa:
+    hibernate:
+      ddl-auto: {{{ddlAuto}}}
+    show-sql: false
+    properties:
+      hibernate:
+        {{#isPostgreSQL}}
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        {{/isPostgreSQL}}
+        {{#isMySQL}}
+        dialect: org.hibernate.dialect.MySQLDialect
+        {{/isMySQL}}
+        {{#isMariaDB}}
+        dialect: org.hibernate.dialect.MariaDBDialect
+        {{/isMariaDB}}
+        {{#isH2}}
+        dialect: org.hibernate.dialect.H2Dialect
+        {{/isH2}}
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG

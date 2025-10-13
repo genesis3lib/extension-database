@@ -1,0 +1,26 @@
+package {{{javaPackageFull}}}.config;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+/**
+ * Database configuration for {{{projectName}}}
+ *
+ * Database: {{{databaseType}}}
+ * Connection Pool Size: {{{connectionPoolSize}}}
+ * DDL Auto: {{{ddlAuto}}}
+ */
+@Slf4j
+@Configuration
+@EnableJpaRepositories(basePackages = "{{{javaPackageFull}}}.repository")
+@ConfigurationProperties(prefix = "spring.datasource")
+public class DatabaseConfig {
+
+    public DatabaseConfig() {
+        log.info("Initializing {{{databaseType}}} database configuration");
+        log.info("Connection pool size: {{{connectionPoolSize}}}");
+        log.info("DDL auto mode: {{{ddlAuto}}}");
+    }
+}

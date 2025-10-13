@@ -1,0 +1,128 @@
+{
+  "version": "3.0.0",
+
+  "metadata": {
+    "id": "extension-database",
+    "name": "Database Support (JPA)",
+    "kind": "extension",
+    "type": "database",
+    "layers": ["backend"],
+    "description": "Adds JPA/database support with entity management, repositories, and connection pooling",
+    "version": "1.0.0",
+    "author": "Genesis Team",
+    "tags": ["database", "jpa", "postgresql", "mysql", "spring"],
+    "compatibleWith": ["spring"]
+  },
+
+  "fields": [
+    {
+      "key": "databaseType",
+      "label": "Database Type",
+      "type": "select",
+      "options": ["postgresql", "mysql", "mariadb", "h2"],
+      "default": "postgresql",
+      "required": true,
+      "description": "Database management system",
+      "category": "database"
+    },
+    {
+      "key": "jpaVersion",
+      "label": "JPA Version",
+      "type": "select",
+      "options": ["3.1.0", "3.2.0"],
+      "default": "3.2.0",
+      "required": true,
+      "description": "JPA specification version",
+      "category": "database"
+    },
+    {
+      "key": "connectionPoolSize",
+      "label": "Connection Pool Size",
+      "type": "number",
+      "default": 20,
+      "required": true,
+      "description": "Maximum database connection pool size",
+      "category": "performance"
+    },
+    {
+      "key": "ddlAuto",
+      "label": "DDL Auto Mode",
+      "type": "select",
+      "options": ["none", "validate", "update", "create-drop"],
+      "default": "validate",
+      "required": true,
+      "description": "Hibernate DDL auto mode",
+      "category": "database"
+    }
+  ],
+
+  "dependencies": {
+    "gradle": [
+      "implementation 'org.springframework.boot:spring-boot-starter-data-jpa'"
+    ],
+    "maven": [
+      "<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-data-jpa</artifactId></dependency>"
+    ]
+  },
+
+  "generation": {
+    "layers": {
+      "backend": {
+        "conditionalDependencies": {
+          "databaseDriver": {
+            "condition": "databaseType !== ''",
+            "gradle": {
+              "postgresql": ["runtimeOnly 'org.postgresql:postgresql'"],
+              "mysql": ["runtimeOnly 'com.mysql:mysql-connector-j'"],
+              "mariadb": ["runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'"],
+              "h2": ["runtimeOnly 'com.h2database:h2'"]
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "runtimeConfigTemplate": [
+    {
+      "key": "DB_HOST",
+      "description": "Database host",
+      "example": "localhost",
+      "required": true,
+      "secret": false,
+      "targets": ["backend"]
+    },
+    {
+      "key": "DB_PORT",
+      "description": "Database port",
+      "example": "5432",
+      "required": true,
+      "secret": false,
+      "targets": ["backend"]
+    },
+    {
+      "key": "DB_NAME",
+      "description": "Database name",
+      "example": "{{projectName}}",
+      "required": true,
+      "secret": false,
+      "targets": ["backend"]
+    },
+    {
+      "key": "DB_USERNAME",
+      "description": "Database username",
+      "example": "{{projectName}}_user",
+      "required": true,
+      "secret": false,
+      "targets": ["backend"]
+    },
+    {
+      "key": "DB_PASSWORD",
+      "description": "Database password",
+      "example": "changeme",
+      "required": true,
+      "secret": true,
+      "targets": ["backend"]
+    }
+  ]
+}

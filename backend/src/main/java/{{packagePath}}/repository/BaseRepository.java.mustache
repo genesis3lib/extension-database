@@ -1,0 +1,15 @@
+package {{{javaPackageFull}}}.repository;
+
+import {{{javaPackageFull}}}.domain.BaseEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
+
+/**
+ * Base repository interface for {{{projectName}}}
+ *
+ * Provides common CRUD operations for all entities
+ * Extend this interface for entity-specific repositories
+ */
+@NoRepositoryBean
+public interface BaseRepository<T extends BaseEntity> extends JpaRepository<T, Long> {
+}
