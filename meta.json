@@ -14,7 +14,7 @@
     "compatibleWith": ["spring"]
   },
 
-  "fields": [
+  "scaffoldConfigTemplate": [
     {
       "key": "databaseType",
       "label": "Database Type",
@@ -64,6 +64,13 @@
       "<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-data-jpa</artifactId></dependency>"
     ]
   },
+
+  "files": [
+    "backend/src/main/java/{{packagePath}}/config/DatabaseConfig.java.mustache",
+    "backend/src/main/java/{{packagePath}}/domain/BaseEntity.java.mustache",
+    "backend/src/main/java/{{packagePath}}/repository/BaseRepository.java.mustache",
+    "backend/src/main/resources/application-database.yaml.mustache"
+  ],
 
   "generation": {
     "layers": {
