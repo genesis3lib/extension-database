@@ -12,7 +12,8 @@
     "author": "Genesis Team",
     "tags": ["database", "jpa", "postgresql", "mysql", "spring"],
     "compatibleWith": ["spring"],
-    "springProfiles": ["database"]
+    "springProfiles": ["database"],
+    "allowMultiple": true
   },
 
   "scaffoldConfigTemplate": [
