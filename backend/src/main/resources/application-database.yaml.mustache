@@ -1,5 +1,7 @@
 # Database configuration added by extension-database
 spring:
+  liquibase:
+    default-schema: {{backendModule.id}}
   datasource:
     {{#isPostgreSQL}}
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/{{{projectName}}}}

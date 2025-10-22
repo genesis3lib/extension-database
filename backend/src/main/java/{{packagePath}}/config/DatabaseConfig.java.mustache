@@ -1,9 +1,18 @@
 package {{{javaPackageFull}}}.config;
 
+import liquibase.integration.spring.SpringLiquibase;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Database configuration for {{{projectName}}}
@@ -18,9 +27,51 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ConfigurationProperties(prefix = "spring.datasource")
 public class DatabaseConfig {
 
+    @Value("${spring.datasource.url}")
+    private String jdbcUrl;
+
+    @Value("${spring.datasource.username}")
+    private String username;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+    @Value("${spring.liquibase.default-schema}")
+    private String schema;
+
     public DatabaseConfig() {
         log.info("Initializing {{{databaseType}}} database configuration");
         log.info("Connection pool size: {{{connectionPoolSize}}}");
         log.info("DDL auto mode: {{{ddlAuto}}}");
+    }
+
+    @Bean
+    public SpringLiquibase liquibase(DataSource dataSource) {
+        createSchema();
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setDataSource(dataSource);
+        liquibase.setDefaultSchema(schema);
+        liquibase.setChangeLog("classpath:db/changelog/db.changelog-master.yaml");
+        return liquibase;
+    }
+
+    private void createSchema() {
+        // Connect to public schema to create the target schema
+        String baseUrl = jdbcUrl.replaceAll("(?i)[?&]currentSchema=[^&]*", "");
+        if (baseUrl.contains("?")) {
+            baseUrl = baseUrl + "&currentSchema=public";
+        } else {
+            baseUrl = baseUrl + "?currentSchema=public";
+        }
+
+        try (Connection conn = DriverManager.getConnection(baseUrl, username, password);
+             Statement stmt = conn.createStatement()) {
+            log.info("Creating schema: {}", schema);
+            stmt.execute("CREATE SCHEMA IF NOT EXISTS " + schema);
+            log.info("Schema {} created successfully", schema);
+        } catch (SQLException e) {
+            log.error("Failed to create schema: {}", schema, e);
+            throw new RuntimeException("Failed to create schema: " + schema, e);
+        }
     }
 }
