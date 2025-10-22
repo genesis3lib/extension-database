@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# Start local database for {{{projectName}}}
+# This script starts the database using docker-compose
+
+set -e
+
+echo "🚀 Starting local database for {{{projectName}}}..."
+
+# Check if docker is running
+if ! docker info > /dev/null 2>&1; then
+    echo "❌ Docker is not running. Please start Docker and try again."
+    exit 1
+fi
+
+# Start docker-compose
+docker-compose up -d
+
+# Wait for database to be ready
+echo "⏳ Waiting for database to be ready..."
+sleep 5
+
+# Check health
+{{#if (eq databaseType "postgresql")}}
+until docker exec {{{projectName}}}-postgres pg_isready -U {{{projectName}}}_user > /dev/null 2>&1; do
+    echo "   Database is not ready yet... waiting"
+    sleep 2
+done
+{{/if}}
+{{#if (or (eq databaseType "mysql") (eq databaseType "mariadb"))}}
+until docker exec {{{projectName}}}-{{databaseType}} mysqladmin ping -h localhost > /dev/null 2>&1; do
+    echo "   Database is not ready yet... waiting"
+    sleep 2
+done
+{{/if}}
+
+echo "✅ Database is ready!"
+echo ""
+echo "Database connection details:"
+{{#if (eq databaseType "postgresql")}}
+echo "   Host: localhost"
+echo "   Port: 5432"
+echo "   Database: {{{projectName}}}"
+echo "   Username: {{{projectName}}}_user"
+echo "   Password: devpassword"
+echo ""
+echo "Connect: psql -h localhost -U {{{projectName}}}_user -d {{{projectName}}}"
+{{/if}}
+{{#if (or (eq databaseType "mysql") (eq databaseType "mariadb"))}}
+echo "   Host: localhost"
+echo "   Port: 3306"
+echo "   Database: {{{projectName}}}"
+echo "   Username: {{{projectName}}}_user"
+echo "   Password: devpassword"
+echo ""
+echo "Connect: mysql -h localhost -u {{{projectName}}}_user -p{{{projectName}}}"
+{{/if}}
+echo ""
+echo "To stop the database: docker-compose down"
+echo "To view logs: docker-compose logs -f"

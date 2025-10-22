@@ -58,21 +58,35 @@
 
   "dependencies": {
     "gradle": [
-      "implementation 'org.springframework.boot:spring-boot-starter-data-jpa'"
+      "implementation 'org.springframework.boot:spring-boot-starter-data-jpa'",
+      "implementation 'org.liquibase:liquibase-core'",
+      "compileOnly 'org.projectlombok:lombok'",
+      "annotationProcessor 'org.projectlombok:lombok'"
     ],
     "maven": [
-      "<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-data-jpa</artifactId></dependency>"
+      "<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-data-jpa</artifactId></dependency>",
+      "<dependency><groupId>org.liquibase</groupId><artifactId>liquibase-core</artifactId></dependency>",
+      "<dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><optional>true</optional></dependency>"
     ]
   },
 
   "files": [
     "backend/src/main/java/{{packagePath}}/config/DatabaseConfig.java.mustache",
     "backend/src/main/java/{{packagePath}}/domain/BaseEntity.java.mustache",
+    "backend/src/main/java/{{packagePath}}/domain/User.java.mustache",
     "backend/src/main/java/{{packagePath}}/repository/BaseRepository.java.mustache",
-    "backend/src/main/resources/application-database.yaml.mustache"
+    "backend/src/main/java/{{packagePath}}/repository/UserRepository.java.mustache",
+    "backend/src/main/resources/application-database.yaml.mustache",
+    "backend/src/main/resources/db/changelog/db.changelog-master.yaml.mustache",
+    "backend/src/main/resources/db/changelog/changes/001-create-users-table.yaml.mustache",
+    "backend/docker-compose.yml.mustache",
+    "backend/start-local-db.sh.mustache"
   ],
 
   "generation": {
+    "files": {
+      "remove": []
+    },
     "layers": {
       "backend": {
         "conditionalDependencies": {
@@ -87,7 +101,14 @@
           }
         }
       }
-    }
+    },
+    "postProcess": [
+      {
+        "type": "chmod",
+        "pattern": "**/start-local-db.sh",
+        "mode": "+x"
+      }
+    ]
   },
 
   "runtimeConfigTemplate": [
@@ -131,5 +152,15 @@
       "secret": true,
       "targets": ["backend"]
     }
+  ],
+
+  "gitignore": [
+    "# Database",
+    "*.db",
+    "*.sqlite",
+    "",
+    "# Docker volumes",
+    ".docker/",
+    ""
   ]
 }

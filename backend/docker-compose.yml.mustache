@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  {{#if (eq databaseType "postgresql")}}
+  postgres:
+    image: postgres:16-alpine
+    container_name: {{{projectName}}}-postgres
+    environment:
+      POSTGRES_DB: {{{projectName}}}
+      POSTGRES_USER: {{{projectName}}}_user
+      POSTGRES_PASSWORD: devpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U {{{projectName}}}_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  {{/if}}
+  {{#if (eq databaseType "mysql")}}
+  mysql:
+    image: mysql:8.0
+    container_name: {{{projectName}}}-mysql
+    environment:
+      MYSQL_DATABASE: {{{projectName}}}
+      MYSQL_USER: {{{projectName}}}_user
+      MYSQL_PASSWORD: devpassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  {{/if}}
+  {{#if (eq databaseType "mariadb")}}
+  mariadb:
+    image: mariadb:11
+    container_name: {{{projectName}}}-mariadb
+    environment:
+      MARIADB_DATABASE: {{{projectName}}}
+      MARIADB_USER: {{{projectName}}}_user
+      MARIADB_PASSWORD: devpassword
+      MARIADB_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  {{/if}}
+
+volumes:
+  {{#if (eq databaseType "postgresql")}}
+  postgres_data:
+  {{/if}}
+  {{#if (eq databaseType "mysql")}}
+  mysql_data:
+  {{/if}}
+  {{#if (eq databaseType "mariadb")}}
+  mariadb_data:
+  {{/if}}
