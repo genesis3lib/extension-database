@@ -11,7 +11,8 @@
     "version": "1.0.0",
     "author": "Genesis Team",
     "tags": ["database", "jpa", "postgresql", "mysql", "spring"],
-    "compatibleWith": ["spring"]
+    "compatibleWith": ["spring"],
+    "springProfiles": ["database"]
   },
 
   "scaffoldConfigTemplate": [
