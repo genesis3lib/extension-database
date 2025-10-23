@@ -1,0 +1,50 @@
+package {{{javaPackageFull}}}.jpa.repository;
+
+import {{{javaPackageFull}}}.jpa.entity.AppConfig;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Repository interface for AppConfig entity in {{{projectName}}}
+ *
+ * Provides database operations for runtime application configuration
+ */
+@Repository
+public interface AppConfigRepository extends BaseRepository<AppConfig> {
+
+    /**
+     * Find config by tenant and key
+     *
+     * @param tenantId the tenant identifier
+     * @param key the config key
+     * @return Optional containing the config if found
+     */
+    Optional<AppConfig> findByTenantIdAndKey(String tenantId, String key);
+
+    /**
+     * Find all configs for a tenant
+     *
+     * @param tenantId the tenant identifier
+     * @return List of configs for the tenant
+     */
+    List<AppConfig> findByTenantId(String tenantId);
+
+    /**
+     * Find config by key (for single-tenant apps)
+     *
+     * @param key the config key
+     * @return Optional containing the config if found
+     */
+    Optional<AppConfig> findByKey(String key);
+
+    /**
+     * Check if config exists for tenant and key
+     *
+     * @param tenantId the tenant identifier
+     * @param key the config key
+     * @return true if config exists
+     */
+    boolean existsByTenantIdAndKey(String tenantId, String key);
+}

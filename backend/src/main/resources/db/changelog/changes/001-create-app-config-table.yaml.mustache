@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-app-config-table
+      author: genesis3
+      changes:
+        - createTable:
+            tableName: app_config
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: deleted
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: delete_reason
+                  type: TEXT
+              - column:
+                  name: tenant_id
+                  type: TEXT
+              - column:
+                  name: created_time
+                  type: BIGINT
+                  defaultValueComputed: "EXTRACT(EPOCH FROM NOW()) * 1000"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_time
+                  type: BIGINT
+                  defaultValueComputed: "EXTRACT(EPOCH FROM NOW()) * 1000"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: TEXT
+              - column:
+                  name: modified_by
+                  type: TEXT
+              - column:
+                  name: slug
+                  type: TEXT
+              - column:
+                  name: key
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(1000)
+              - column:
+                  name: value
+                  type: TEXT
+
+        - addUniqueConstraint:
+            tableName: app_config
+            columnNames: tenant_id, key
+            constraintName: uk_app_config_tenant_key
+
+        - createIndex:
+            tableName: app_config
+            indexName: idx_app_config_key
+            columns:
+              - column:
+                  name: key
+
+        - createIndex:
+            tableName: app_config
+            indexName: idx_app_config_tenant
+            columns:
+              - column:
+                  name: tenant_id

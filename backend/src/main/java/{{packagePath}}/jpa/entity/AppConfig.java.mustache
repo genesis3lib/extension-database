@@ -1,0 +1,36 @@
+package {{{javaPackageFull}}}.jpa.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+/**
+ * AppConfig entity for {{{projectName}}}
+ *
+ * Stores runtime application configuration that can be modified by admins on the fly
+ * Each config is identified by a unique (tenant_id, key) combination
+ */
+@Entity
+@Table(name = "app_config", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_app_config_tenant_key", columnNames = {"tenant_id", "key"})
+}, indexes = {
+    @Index(name = "idx_app_config_key", columnList = "key"),
+    @Index(name = "idx_app_config_tenant", columnList = "tenant_id")
+})
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class AppConfig extends BaseEntity {
+
+    @Column(nullable = false, length = 255)
+    private String key;
+
+    @Column(length = 1000)
+    private String description;
+
+    @Column(columnDefinition = "TEXT")
+    private String value;
+}

@@ -74,13 +74,13 @@
 
   "files": [
     "backend/src/main/java/{{packagePath}}/config/DatabaseConfig.java.mustache",
-    "backend/src/main/java/{{packagePath}}/domain/BaseEntity.java.mustache",
-    "backend/src/main/java/{{packagePath}}/domain/User.java.mustache",
-    "backend/src/main/java/{{packagePath}}/repository/BaseRepository.java.mustache",
-    "backend/src/main/java/{{packagePath}}/repository/UserRepository.java.mustache",
+    "backend/src/main/java/{{packagePath}}/jpa/entity/BaseEntity.java.mustache",
+    "backend/src/main/java/{{packagePath}}/jpa/entity/AppConfig.java.mustache",
+    "backend/src/main/java/{{packagePath}}/jpa/repository/BaseRepository.java.mustache",
+    "backend/src/main/java/{{packagePath}}/jpa/repository/AppConfigRepository.java.mustache",
     "backend/src/main/resources/application-database.yaml.mustache",
     "backend/src/main/resources/db/changelog/db.changelog-master.yaml.mustache",
-    "backend/src/main/resources/db/changelog/changes/001-create-users-table.yaml.mustache",
+    "backend/src/main/resources/db/changelog/changes/001-create-app-config-table.yaml.mustache",
     "backend/docker-compose.yml.mustache",
     "backend/start-local-db.sh.mustache"
   ],
