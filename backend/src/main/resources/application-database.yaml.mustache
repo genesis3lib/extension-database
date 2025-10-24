@@ -1,25 +1,25 @@
 # Database configuration added by extension-database
 spring:
   liquibase:
-    default-schema: {{boundBackendModule.id}}
+    default-schema: {{boundBackendModule.moduleId}}
   datasource:
     {{#isPostgreSQL}}
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/{{{projectName}}}}
-    username: ${DATABASE_USERNAME:{{{projectName}}}}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/db-{{{projectName}}}}
+    username: ${DATABASE_USERNAME:user-{{{projectName}}}}
     driver-class-name: org.postgresql.Driver
     {{/isPostgreSQL}}
     {{#isMySQL}}
-    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/{{{projectName}}}}
-    username: ${DATABASE_USERNAME:{{{projectName}}}}
+    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/db-{{{projectName}}}}
+    username: ${DATABASE_USERNAME:user-{{{projectName}}}}
     driver-class-name: com.mysql.cj.jdbc.Driver
     {{/isMySQL}}
     {{#isMariaDB}}
-    url: ${DATABASE_URL:jdbc:mariadb://localhost:3306/{{{projectName}}}}
-    username: ${DATABASE_USERNAME:{{{projectName}}}}
+    url: ${DATABASE_URL:jdbc:mariadb://localhost:3306/db-{{{projectName}}}}
+    username: ${DATABASE_USERNAME:user-{{{projectName}}}}
     driver-class-name: org.mariadb.jdbc.Driver
     {{/isMariaDB}}
     {{#isH2}}
-    url: ${DATABASE_URL:jdbc:h2:mem:{{{projectName}}}}
+    url: ${DATABASE_URL:jdbc:h2:mem:db-{{{projectName}}}}
     username: ${DATABASE_USERNAME:sa}
     driver-class-name: org.h2.Driver
     {{/isH2}}
