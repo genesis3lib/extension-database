@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+{{#isPostgreSQL}}
+  postgres:
+    image: postgres:16-alpine
+    container_name: {{projectName}}-postgres
+    environment:
+      POSTGRES_DB: db-{{projectName}}
+      POSTGRES_USER: user-{{projectName}}
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user-{{projectName}} -d db-{{projectName}}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - {{projectName}}-network
+{{/isPostgreSQL}}
+{{#isMySQL}}
+  mysql:
+    image: mysql:8.0
+    container_name: {{projectName}}-mysql
+    environment:
+      MYSQL_DATABASE: db-{{projectName}}
+      MYSQL_USER: user-{{projectName}}
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "user-{{projectName}}", "-ppassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - {{projectName}}-network
+{{/isMySQL}}
+{{#isMariaDB}}
+  mariadb:
+    image: mariadb:11
+    container_name: {{projectName}}-mariadb
+    environment:
+      MARIADB_DATABASE: db-{{projectName}}
+      MARIADB_USER: user-{{projectName}}
+      MARIADB_PASSWORD: password
+      MARIADB_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - {{projectName}}-network
+{{/isMariaDB}}
+
+networks:
+  {{projectName}}-network:
+    driver: bridge
+
+volumes:
+{{#isPostgreSQL}}
+  postgres-data:
+{{/isPostgreSQL}}
+{{#isMySQL}}
+  mysql-data:
+{{/isMySQL}}
+{{#isMariaDB}}
+  mariadb-data:
+{{/isMariaDB}}

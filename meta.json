@@ -83,7 +83,8 @@
     "backend/src/main/resources/db/changelog/db.changelog-master.yaml.mustache",
     "backend/src/main/resources/db/changelog/changes/001-create-app-config-table.yaml.mustache",
     "backend/docker-compose.yml.mustache",
-    "backend/start-local-db.sh.mustache"
+    "backend/start-local-db.sh.mustache",
+    "project/zz{{projectName}}/docker-compose.yaml.mustache"
   ],
 
   "generation": {
