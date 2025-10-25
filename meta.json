@@ -78,6 +78,7 @@
     "backend/src/main/java/{{packagePath}}/jpa/entity/AppConfig.java.mustache",
     "backend/src/main/java/{{packagePath}}/jpa/repository/BaseRepository.java.mustache",
     "backend/src/main/java/{{packagePath}}/jpa/repository/AppConfigRepository.java.mustache",
+    "backend/src/main/java/{{packagePath}}/model/rsp/AppConfigRsp.java.mustache",
     "backend/src/main/resources/application-database.yaml.mustache",
     "backend/src/main/resources/db/changelog/db.changelog-master.yaml.mustache",
     "backend/src/main/resources/db/changelog/changes/001-create-app-config-table.yaml.mustache",
