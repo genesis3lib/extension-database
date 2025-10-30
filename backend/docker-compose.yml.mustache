@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  {{#if (eq databaseType "postgresql")}}
+  {{#isPostgreSQL}}
   postgres:
     image: postgres:16-alpine
     container_name: {{{projectName}}}-postgres
@@ -18,8 +18,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  {{/if}}
-  {{#if (eq databaseType "mysql")}}
+  {{/isPostgreSQL}}
+  {{#isMySQL}}
   mysql:
     image: mysql:8.0
     container_name: {{{projectName}}}-mysql
@@ -37,8 +37,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  {{/if}}
-  {{#if (eq databaseType "mariadb")}}
+  {{/isMySQL}}
+  {{#isMariaDB}}
   mariadb:
     image: mariadb:11
     container_name: {{{projectName}}}-mariadb
@@ -56,15 +56,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  {{/if}}
+  {{/isMariaDB}}
 
 volumes:
-  {{#if (eq databaseType "postgresql")}}
+  {{#isPostgreSQL}}
   postgres_data:
-  {{/if}}
-  {{#if (eq databaseType "mysql")}}
+  {{/isPostgreSQL}}
+  {{#isMySQL}}
   mysql_data:
-  {{/if}}
-  {{#if (eq databaseType "mariadb")}}
+  {{/isMySQL}}
+  {{#isMariaDB}}
   mariadb_data:
-  {{/if}}
+  {{/isMariaDB}}

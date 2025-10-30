@@ -21,23 +21,29 @@ echo "⏳ Waiting for database to be ready..."
 sleep 5
 
 # Check health
-{{#if (eq databaseType "postgresql")}}
+{{#isPostgreSQL}}
 until docker exec {{{projectName}}}-postgres pg_isready -U {{{projectName}}}_user > /dev/null 2>&1; do
     echo "   Database is not ready yet... waiting"
     sleep 2
 done
-{{/if}}
-{{#if (or (eq databaseType "mysql") (eq databaseType "mariadb"))}}
-until docker exec {{{projectName}}}-{{databaseType}} mysqladmin ping -h localhost > /dev/null 2>&1; do
+{{/isPostgreSQL}}
+{{#isMySQL}}
+until docker exec {{{projectName}}}-mysql mysqladmin ping -h localhost > /dev/null 2>&1; do
     echo "   Database is not ready yet... waiting"
     sleep 2
 done
-{{/if}}
+{{/isMySQL}}
+{{#isMariaDB}}
+until docker exec {{{projectName}}}-mariadb mysqladmin ping -h localhost > /dev/null 2>&1; do
+    echo "   Database is not ready yet... waiting"
+    sleep 2
+done
+{{/isMariaDB}}
 
 echo "✅ Database is ready!"
 echo ""
 echo "Database connection details:"
-{{#if (eq databaseType "postgresql")}}
+{{#isPostgreSQL}}
 echo "   Host: localhost"
 echo "   Port: 5432"
 echo "   Database: {{{projectName}}}"
@@ -45,8 +51,8 @@ echo "   Username: {{{projectName}}}_user"
 echo "   Password: devpassword"
 echo ""
 echo "Connect: psql -h localhost -U {{{projectName}}}_user -d {{{projectName}}}"
-{{/if}}
-{{#if (or (eq databaseType "mysql") (eq databaseType "mariadb"))}}
+{{/isPostgreSQL}}
+{{#isMySQL}}
 echo "   Host: localhost"
 echo "   Port: 3306"
 echo "   Database: {{{projectName}}}"
@@ -54,7 +60,16 @@ echo "   Username: {{{projectName}}}_user"
 echo "   Password: devpassword"
 echo ""
 echo "Connect: mysql -h localhost -u {{{projectName}}}_user -p{{{projectName}}}"
-{{/if}}
+{{/isMySQL}}
+{{#isMariaDB}}
+echo "   Host: localhost"
+echo "   Port: 3306"
+echo "   Database: {{{projectName}}}"
+echo "   Username: {{{projectName}}}_user"
+echo "   Password: devpassword"
+echo ""
+echo "Connect: mysql -h localhost -u {{{projectName}}}_user -p{{{projectName}}}"
+{{/isMariaDB}}
 echo ""
 echo "To stop the database: docker-compose down"
 echo "To view logs: docker-compose logs -f"
