@@ -1,27 +1,42 @@
 {
   "version": "3.0.0",
-
   "metadata": {
     "id": "extension-database",
     "name": "Database Support (JPA)",
     "kind": "extension",
     "type": "database",
-    "layers": ["backend"],
+    "layers": [
+      "backend"
+    ],
     "description": "Adds JPA/database support with entity management, repositories, and connection pooling",
     "version": "1.0.0",
     "author": "Genesis Team",
-    "tags": ["database", "jpa", "postgresql", "mysql", "spring"],
-    "compatibleWith": ["spring"],
-    "springProfiles": ["database"],
+    "tags": [
+      "database",
+      "jpa",
+      "postgresql",
+      "mysql",
+      "spring"
+    ],
+    "compatibleWith": [
+      "spring"
+    ],
+    "springProfiles": [
+      "database"
+    ],
     "allowMultiple": true
   },
-
   "scaffoldConfigTemplate": [
     {
       "key": "databaseType",
       "label": "Database Type",
       "type": "select",
-      "options": ["postgresql", "mysql", "mariadb", "h2"],
+      "options": [
+        "postgresql",
+        "mysql",
+        "mariadb",
+        "h2"
+      ],
       "default": "postgresql",
       "required": true,
       "description": "Database management system",
@@ -31,7 +46,10 @@
       "key": "jpaVersion",
       "label": "JPA Version",
       "type": "select",
-      "options": ["3.1.0", "3.2.0"],
+      "options": [
+        "3.1.0",
+        "3.2.0"
+      ],
       "default": "3.2.0",
       "required": true,
       "description": "JPA specification version",
@@ -50,14 +68,18 @@
       "key": "ddlAuto",
       "label": "DDL Auto Mode",
       "type": "select",
-      "options": ["none", "validate", "update", "create-drop"],
+      "options": [
+        "none",
+        "validate",
+        "update",
+        "create-drop"
+      ],
       "default": "validate",
       "required": true,
       "description": "Hibernate DDL auto mode",
       "category": "database"
     }
   ],
-
   "dependencies": {
     "gradle": [
       "implementation 'org.springframework.boot:spring-boot-starter-data-jpa'",
@@ -71,22 +93,6 @@
       "<dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><optional>true</optional></dependency>"
     ]
   },
-
-  "files": [
-    "backend/src/main/java/{{packagePath}}/config/DatabaseConfig.java.mustache",
-    "backend/src/main/java/{{packagePath}}/jpa/entity/BaseEntity.java.mustache",
-    "backend/src/main/java/{{packagePath}}/jpa/entity/AppConfig.java.mustache",
-    "backend/src/main/java/{{packagePath}}/jpa/repository/BaseRepository.java.mustache",
-    "backend/src/main/java/{{packagePath}}/jpa/repository/AppConfigRepository.java.mustache",
-    "backend/src/main/java/{{packagePath}}/model/rsp/AppConfigRsp.java.mustache",
-    "backend/src/main/resources/application-database.yaml.mustache",
-    "backend/src/main/resources/db/changelog/db.changelog-master.yaml.mustache",
-    "backend/src/main/resources/db/changelog/changes/001-create-app-config-table.yaml.mustache",
-    "backend/docker-compose.yml.mustache",
-    "backend/start-local-db.sh.mustache",
-    "project/zz{{projectName}}/docker-compose.yaml.mustache"
-  ],
-
   "generation": {
     "files": {
       "remove": []
@@ -97,10 +103,18 @@
           "databaseDriver": {
             "condition": "databaseType !== ''",
             "gradle": {
-              "postgresql": ["runtimeOnly 'org.postgresql:postgresql'"],
-              "mysql": ["runtimeOnly 'com.mysql:mysql-connector-j'"],
-              "mariadb": ["runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'"],
-              "h2": ["runtimeOnly 'com.h2database:h2'"]
+              "postgresql": [
+                "runtimeOnly 'org.postgresql:postgresql'"
+              ],
+              "mysql": [
+                "runtimeOnly 'com.mysql:mysql-connector-j'"
+              ],
+              "mariadb": [
+                "runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'"
+              ],
+              "h2": [
+                "runtimeOnly 'com.h2database:h2'"
+              ]
             }
           }
         }
@@ -114,7 +128,6 @@
       }
     ]
   },
-
   "runtimeConfigTemplate": [
     {
       "key": "DB_HOST",
@@ -122,7 +135,9 @@
       "example": "localhost",
       "required": true,
       "secret": false,
-      "targets": ["backend"]
+      "targets": [
+        "backend"
+      ]
     },
     {
       "key": "DB_PORT",
@@ -130,7 +145,9 @@
       "example": "5432",
       "required": true,
       "secret": false,
-      "targets": ["backend"]
+      "targets": [
+        "backend"
+      ]
     },
     {
       "key": "DB_NAME",
@@ -138,7 +155,9 @@
       "example": "{{projectName}}",
       "required": true,
       "secret": false,
-      "targets": ["backend"]
+      "targets": [
+        "backend"
+      ]
     },
     {
       "key": "DB_USERNAME",
@@ -146,7 +165,9 @@
       "example": "{{projectName}}_user",
       "required": true,
       "secret": false,
-      "targets": ["backend"]
+      "targets": [
+        "backend"
+      ]
     },
     {
       "key": "DB_PASSWORD",
@@ -154,10 +175,11 @@
       "example": "changeme",
       "required": true,
       "secret": true,
-      "targets": ["backend"]
+      "targets": [
+        "backend"
+      ]
     }
   ],
-
   "gitignore": [
     "# Database",
     "*.db",
