@@ -4,18 +4,18 @@ spring:
     default-schema: {{boundBackendModule.moduleId}}
   datasource:
     {{#isPostgreSQL}}
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/db-{{{projectName}}}}
-    username: ${DATABASE_USERNAME:user-{{{projectName}}}}
+    url: ${DATABASE_URL:jdbc:postgresql://${SPRING_ENV_DB_HOST:localhost}:${SPRING_ENV_DB_PORT:5432}/${SPRING_ENV_DB_NAME:db-{{{projectName}}}}}
+    username: ${DATABASE_USERNAME:${SPRING_ENV_DB_USERNAME:user-{{{projectName}}}}}
     driver-class-name: org.postgresql.Driver
     {{/isPostgreSQL}}
     {{#isMySQL}}
-    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/db-{{{projectName}}}}
-    username: ${DATABASE_USERNAME:user-{{{projectName}}}}
+    url: ${DATABASE_URL:jdbc:mysql://${SPRING_ENV_DB_HOST:localhost}:${SPRING_ENV_DB_PORT:3306}/${SPRING_ENV_DB_NAME:db-{{{projectName}}}}}
+    username: ${DATABASE_USERNAME:${SPRING_ENV_DB_USERNAME:user-{{{projectName}}}}}
     driver-class-name: com.mysql.cj.jdbc.Driver
     {{/isMySQL}}
     {{#isMariaDB}}
-    url: ${DATABASE_URL:jdbc:mariadb://localhost:3306/db-{{{projectName}}}}
-    username: ${DATABASE_USERNAME:user-{{{projectName}}}}
+    url: ${DATABASE_URL:jdbc:mariadb://${SPRING_ENV_DB_HOST:localhost}:${SPRING_ENV_DB_PORT:3306}/${SPRING_ENV_DB_NAME:db-{{{projectName}}}}}
+    username: ${DATABASE_USERNAME:${SPRING_ENV_DB_USERNAME:user-{{{projectName}}}}}
     driver-class-name: org.mariadb.jdbc.Driver
     {{/isMariaDB}}
     {{#isH2}}
@@ -23,7 +23,7 @@ spring:
     username: ${DATABASE_USERNAME:sa}
     driver-class-name: org.h2.Driver
     {{/isH2}}
-    password: ${DATABASE_PASSWORD:password}
+    password: ${DATABASE_PASSWORD:${SPRING_ENV_DB_PASSWORD:password}}
     hikari:
       maximum-pool-size: {{{connectionPoolSize}}}
   jpa:
