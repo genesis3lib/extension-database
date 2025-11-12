@@ -128,58 +128,6 @@
       }
     ]
   },
-  "runtimeConfigTemplate": [
-    {
-      "key": "DB_HOST",
-      "description": "Database host",
-      "example": "localhost",
-      "required": true,
-      "secret": false,
-      "targets": [
-        "backend"
-      ]
-    },
-    {
-      "key": "DB_PORT",
-      "description": "Database port",
-      "example": "5432",
-      "required": true,
-      "secret": false,
-      "targets": [
-        "backend"
-      ]
-    },
-    {
-      "key": "DB_NAME",
-      "description": "Database name",
-      "example": "{{projectName}}",
-      "required": true,
-      "secret": false,
-      "targets": [
-        "backend"
-      ]
-    },
-    {
-      "key": "DB_USERNAME",
-      "description": "Database username",
-      "example": "{{projectName}}_user",
-      "required": true,
-      "secret": false,
-      "targets": [
-        "backend"
-      ]
-    },
-    {
-      "key": "DB_PASSWORD",
-      "description": "Database password",
-      "example": "changeme",
-      "required": true,
-      "secret": true,
-      "targets": [
-        "backend"
-      ]
-    }
-  ],
   "gitignore": [
     "# Database",
     "*.db",
